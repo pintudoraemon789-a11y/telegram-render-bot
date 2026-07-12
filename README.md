@@ -2,6 +2,32 @@
 
 Template bot Telegram Node.js + Telegraf + Express, siap deploy ke Render.
 
+## Fitur
+
+- Catat pemasukan dan pengeluaran harian
+- Lihat saldo dan 10 transaksi terakhir
+- Simpan catatan teks sederhana
+- Buat reminder/jadwal
+- Menu bantuan via `/bantu`
+
+## Perintah Bot
+
+```text
+/catat masuk 50000 gaji harian
+/catat keluar 12000 makan
+/saldo
+/laporan
+/file ide-bisnis isi catatan
+/files
+/ingat 2026-07-13 18:30 bayar listrik
+/jadwal
+/bantu
+```
+
+Catatan: reminder memakai waktu WIB. Penyimpanan default memakai file JSON lokal di folder `data/`.
+
+Penting untuk Render Free: file lokal dan reminder tidak selalu tahan restart/sleep/deploy. Untuk penggunaan serius, pindahkan storage ke database seperti PostgreSQL/SQLite persistent disk.
+
 ## 1. Ambil token bot
 
 1. Buka Telegram, chat `@BotFather`
