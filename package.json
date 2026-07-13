@@ -4,8 +4,8 @@
   "description": "OpenClaw Gateway Telegram webhook untuk Render",
   "type": "module",
   "scripts": {
-    "start": "node scripts/ensure-openclaw-config.mjs && node scripts/render-webhook-proxy.mjs & openclaw gateway --bind lan --port ${OPENCLAW_GATEWAY_PORT:-18789}",
-    "check": "node --check scripts/ensure-openclaw-config.mjs && node --check scripts/render-webhook-proxy.mjs"
+    "start": "node scripts/start-render.mjs",
+    "check": "node --check scripts/ensure-openclaw-config.mjs && node --check scripts/render-webhook-proxy.mjs && node --check scripts/start-render.mjs"
   },
   "engines": {
     "node": ">=22.19.0"
