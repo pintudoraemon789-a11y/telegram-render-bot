@@ -15,6 +15,8 @@ services:
         sync: false
       - key: OPENCLAW_GATEWAY_TOKEN
         sync: false
+      - key: OPENCLAW_MODEL
+        value: openai/gpt-4.1-mini
       - key: TELEGRAM_WEBHOOK_SECRET
         sync: false
       - key: RENDER_EXTERNAL_URL
