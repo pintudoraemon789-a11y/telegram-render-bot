@@ -14,6 +14,7 @@ if (!/^[A-Za-z0-9_-]{1,256}$/.test(webhookSecret)) {
 process.env.TELEGRAM_WEBHOOK_SECRET = webhookSecret;
 
 const webhookLocalPort = Number(process.env.TELEGRAM_WEBHOOK_LOCAL_PORT || 8787);
+const openclawModel = process.env.OPENCLAW_MODEL || "openai/gpt-4.1-mini";
 
 process.env.OPENCLAW_STATE_DIR = stateDir;
 process.env.OPENCLAW_WORKSPACE_DIR = workspaceDir;
@@ -32,6 +33,7 @@ console.log(`Env check: OPENAI_API_KEY=${process.env.OPENAI_API_KEY ? "set" : "m
 console.log(`Env check: OPENCLAW_GATEWAY_TOKEN=${process.env.OPENCLAW_GATEWAY_TOKEN ? "set" : "missing"}`);
 console.log(`Env check: TELEGRAM_WEBHOOK_SECRET=${webhookSecret ? "set" : "missing"}`);
 console.log(`Env check: RENDER_EXTERNAL_URL=${renderExternalUrl || "missing"}`);
+console.log(`Env check: OPENCLAW_MODEL=${openclawModel}`);
 
 const normalizedPath = webhookPath.startsWith("/") ? webhookPath : `/${webhookPath}`;
 const webhookUrl = renderExternalUrl ? `${renderExternalUrl.replace(/\/$/, "")}${normalizedPath}` : "";
@@ -49,7 +51,7 @@ const config = {
     defaults: {
       workspace: workspaceDir,
       model: {
-        primary: "openai/gpt-5.5",
+        primary: openclawModel,
       },
     },
     list: [
@@ -59,7 +61,7 @@ const config = {
         identity: {
           name: "Vero",
           theme: "Ramah, rajin, hangat, sigap, dan bisa diajak ngobrol santai dalam Bahasa Indonesia",
-          emoji: "✨",
+          emoji: "âœ¨",
         },
       },
     ],
