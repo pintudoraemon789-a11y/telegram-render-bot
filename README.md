@@ -25,11 +25,12 @@ Pastikan Render memakai:
 
 ## Environment Variables wajib
 
-Isi di Render → service → Environment:
+Isi di Render â†’ service â†’ Environment:
 
 - `TELEGRAM_BOT_TOKEN` = token bot Telegram dari BotFather
 - `OPENAI_API_KEY` = API key OpenAI
 - `OPENCLAW_GATEWAY_TOKEN` = secret random panjang
+- `OPENCLAW_MODEL` = model OpenClaw, default/rekomendasi `openai/gpt-4.1-mini`
 - `TELEGRAM_WEBHOOK_SECRET` = secret random panjang untuk verifikasi webhook Telegram
 - `RENDER_EXTERNAL_URL` = URL Render, contoh `https://telegram-render-bot-ir2l.onrender.com`
 
@@ -53,7 +54,7 @@ Jika nanti memakai paid Render disk, baru boleh ganti ke:
 
 ## Deploy
 
-Render → service `telegram-render-bot` → Manual Deploy → Deploy latest commit.
+Render â†’ service `telegram-render-bot` â†’ Manual Deploy â†’ Deploy latest commit.
 
 Tes setelah live:
 
