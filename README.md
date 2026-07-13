@@ -39,7 +39,12 @@ Environment lain:
 - `TELEGRAM_WEBHOOK_LOCAL_PORT=8787`
 - `OPENCLAW_GATEWAY_PORT=18789`
 
-Jika memakai paid Render disk:
+Untuk service tanpa persistent disk, pakai:
+
+- `OPENCLAW_STATE_DIR=/opt/render/project/src/.openclaw-state`
+- `OPENCLAW_WORKSPACE_DIR=/opt/render/project/src/.openclaw-state/workspace`
+
+Jika nanti memakai paid Render disk, baru boleh ganti ke:
 
 - `OPENCLAW_STATE_DIR=/data/.openclaw`
 - `OPENCLAW_WORKSPACE_DIR=/data/workspace`

@@ -26,10 +26,6 @@ services:
       - key: OPENCLAW_GATEWAY_PORT
         value: "18789"
       - key: OPENCLAW_STATE_DIR
-        value: /data/.openclaw
+        value: /opt/render/project/src/.openclaw-state
       - key: OPENCLAW_WORKSPACE_DIR
-        value: /data/workspace
-    disk:
-      name: openclaw-data
-      mountPath: /data
-      sizeGB: 1
+        value: /opt/render/project/src/.openclaw-state/workspace
