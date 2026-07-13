@@ -9,6 +9,10 @@ const webhookPath = process.env.TELEGRAM_WEBHOOK_PATH || "/telegram-webhook";
 const webhookSecret = process.env.TELEGRAM_WEBHOOK_SECRET || "${TELEGRAM_WEBHOOK_SECRET}";
 const webhookLocalPort = Number(process.env.TELEGRAM_WEBHOOK_LOCAL_PORT || 8787);
 
+process.env.OPENCLAW_STATE_DIR = stateDir;
+process.env.OPENCLAW_WORKSPACE_DIR = workspaceDir;
+process.env.OPENCLAW_CONFIG_PATH = configPath;
+
 fs.mkdirSync(stateDir, { recursive: true });
 fs.mkdirSync(workspaceDir, { recursive: true });
 fs.mkdirSync(path.dirname(configPath), { recursive: true });
