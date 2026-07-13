@@ -9,6 +9,15 @@ const openclawCli = path.join(root, "node_modules", "openclaw", "openclaw.mjs");
 const proxyScript = path.join(root, "scripts", "render-webhook-proxy.mjs");
 const gatewayPort = process.env.OPENCLAW_GATEWAY_PORT || "18789";
 const childStatusPath = process.env.RENDER_CHILD_STATUS_PATH || "/tmp/openclaw-render-child-status.json";
+const startupLogPath = process.env.RENDER_STARTUP_LOG_PATH || "/tmp/openclaw-render-startup.log";
+
+function appendStartupLog(line) {
+  try {
+    fs.appendFileSync(startupLogPath, `${new Date().toISOString()} ${line}\n`);
+  } catch {
+    // Best-effort debug log only.
+  }
+}
 
 function writeChildStatus(extra = {}) {
   const childrenStatus = [...children].map((child) => ({
@@ -41,9 +50,19 @@ writeChildStatus({ event: "init" });
 
 function startChild(name, command, args) {
   console.log(`Starting ${name}: ${command} ${args.join(" ")}`);
+  appendStartupLog(`Starting ${name}: ${command} ${args.join(" ")}`);
   const child = spawn(command, args, {
-    stdio: "inherit",
+    stdio: ["ignore", "pipe", "pipe"],
     env: process.env,
+  });
+
+  child.stdout?.on("data", (chunk) => {
+    process.stdout.write(chunk);
+    appendStartupLog(`[${name} stdout] ${chunk.toString().trimEnd()}`);
+  });
+  child.stderr?.on("data", (chunk) => {
+    process.stderr.write(chunk);
+    appendStartupLog(`[${name} stderr] ${chunk.toString().trimEnd()}`);
   });
 
   children.add(child);
