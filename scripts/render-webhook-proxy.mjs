@@ -1,4 +1,5 @@
 import http from "node:http";
+import fs from "node:fs";
 
 const port = Number(process.env.PORT || 3000);
 const webhookPath = (process.env.TELEGRAM_WEBHOOK_PATH || "/telegram-webhook").startsWith("/")
@@ -38,6 +39,13 @@ const server = http.createServer(async (req, res) => {
       }
 
       res.writeHead(200, { "content-type": "application/json" });
+      let childStatus = null;
+      try {
+        childStatus = JSON.parse(fs.readFileSync(process.env.RENDER_CHILD_STATUS_PATH || "/tmp/openclaw-render-child-status.json", "utf8"));
+      } catch {
+        childStatus = null;
+      }
+
       res.end(JSON.stringify({
         ok: true,
         service: "openclaw-render-webhook-proxy",
@@ -45,6 +53,7 @@ const server = http.createServer(async (req, res) => {
         targetUrl,
         localWebhookReachable,
         localWebhookStatus,
+        childStatus,
         env: {
           telegramBotToken: process.env.TELEGRAM_BOT_TOKEN ? "set" : "missing",
           openaiApiKey: process.env.OPENAI_API_KEY ? "set" : "missing",
