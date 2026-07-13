@@ -26,6 +26,36 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (req.method === "GET" && url.pathname === "/debug") {
+      let localWebhookReachable = false;
+      let localWebhookStatus = null;
+      try {
+        const response = await fetch(targetUrl, { method: "POST", headers: { "content-type": "application/json" }, body: "{}" });
+        localWebhookReachable = true;
+        localWebhookStatus = response.status;
+      } catch {
+        localWebhookReachable = false;
+      }
+
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({
+        ok: true,
+        service: "openclaw-render-webhook-proxy",
+        webhookPath,
+        targetUrl,
+        localWebhookReachable,
+        localWebhookStatus,
+        env: {
+          telegramBotToken: process.env.TELEGRAM_BOT_TOKEN ? "set" : "missing",
+          openaiApiKey: process.env.OPENAI_API_KEY ? "set" : "missing",
+          openclawGatewayToken: process.env.OPENCLAW_GATEWAY_TOKEN ? "set" : "missing",
+          telegramWebhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET ? "set" : "missing",
+          renderExternalUrl: process.env.RENDER_EXTERNAL_URL || process.env.WEBHOOK_URL || "missing",
+        },
+      }));
+      return;
+    }
+
     if (url.pathname === webhookPath) {
       if (req.method !== "POST") {
         res.writeHead(405, { "content-type": "text/plain" });
