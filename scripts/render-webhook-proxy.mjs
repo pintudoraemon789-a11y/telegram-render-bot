@@ -1,5 +1,4 @@
 import http from "node:http";
-import fs from "node:fs";
 
 const port = Number(process.env.PORT || 3000);
 const webhookPath = (process.env.TELEGRAM_WEBHOOK_PATH || "/telegram-webhook").startsWith("/")
@@ -27,7 +26,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    if (req.method === "GET" && url.pathname === "/debug") {
+    if (req.method === "GET" && url.pathname === "/debug" && process.env.ENABLE_DEBUG_ENDPOINT === "true") {
       let localWebhookReachable = false;
       let localWebhookStatus = null;
       try {
@@ -39,45 +38,12 @@ const server = http.createServer(async (req, res) => {
       }
 
       res.writeHead(200, { "content-type": "application/json" });
-      let childStatus = null;
-      try {
-        childStatus = JSON.parse(fs.readFileSync(process.env.RENDER_CHILD_STATUS_PATH || "/tmp/openclaw-render-child-status.json", "utf8"));
-      } catch {
-        childStatus = null;
-      }
-
-      let startupLogTail = [];
-      try {
-        const rawLog = fs.readFileSync(process.env.RENDER_STARTUP_LOG_PATH || "/tmp/openclaw-render-startup.log", "utf8");
-        const secrets = [
-          process.env.TELEGRAM_BOT_TOKEN,
-          process.env.OPENAI_API_KEY,
-          process.env.OPENCLAW_GATEWAY_TOKEN,
-          process.env.TELEGRAM_WEBHOOK_SECRET,
-        ].filter(Boolean);
-        let safeLog = rawLog;
-        for (const secret of secrets) safeLog = safeLog.split(secret).join("***");
-        startupLogTail = safeLog.split(/\r?\n/).filter(Boolean).slice(-120);
-      } catch {
-        startupLogTail = [];
-      }
-
       res.end(JSON.stringify({
         ok: true,
         service: "openclaw-render-webhook-proxy",
         webhookPath,
-        targetUrl,
         localWebhookReachable,
         localWebhookStatus,
-        childStatus,
-        startupLogTail,
-        env: {
-          telegramBotToken: process.env.TELEGRAM_BOT_TOKEN ? "set" : "missing",
-          openaiApiKey: process.env.OPENAI_API_KEY ? "set" : "missing",
-          openclawGatewayToken: process.env.OPENCLAW_GATEWAY_TOKEN ? "set" : "missing",
-          telegramWebhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET ? "set" : "missing",
-          renderExternalUrl: process.env.RENDER_EXTERNAL_URL || process.env.WEBHOOK_URL || "missing",
-        },
       }));
       return;
     }
