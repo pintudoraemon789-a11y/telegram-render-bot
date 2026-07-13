@@ -1,11 +1,11 @@
-﻿{
+{
   "name": "telegram-render-bot",
-  "version": "2.0.0",
-  "description": "OpenClaw Gateway untuk Telegram di Render",
+  "version": "2.1.0",
+  "description": "OpenClaw Gateway Telegram webhook untuk Render",
   "type": "module",
   "scripts": {
-    "start": "node scripts/ensure-openclaw-config.mjs && openclaw gateway --bind lan --port $PORT",
-    "check": "node --check scripts/ensure-openclaw-config.mjs"
+    "start": "node scripts/ensure-openclaw-config.mjs && node scripts/render-webhook-proxy.mjs & openclaw gateway --bind lan --port ${OPENCLAW_GATEWAY_PORT:-18789}",
+    "check": "node --check scripts/ensure-openclaw-config.mjs && node --check scripts/render-webhook-proxy.mjs"
   },
   "engines": {
     "node": ">=20"

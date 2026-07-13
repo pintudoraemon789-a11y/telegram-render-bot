@@ -13,6 +13,16 @@ services:
         sync: false
       - key: OPENCLAW_GATEWAY_TOKEN
         sync: false
+      - key: TELEGRAM_WEBHOOK_SECRET
+        sync: false
+      - key: RENDER_EXTERNAL_URL
+        value: https://telegram-render-bot-ir2l.onrender.com
+      - key: TELEGRAM_WEBHOOK_PATH
+        value: /telegram-webhook
+      - key: TELEGRAM_WEBHOOK_LOCAL_PORT
+        value: "8787"
+      - key: OPENCLAW_GATEWAY_PORT
+        value: "18789"
       - key: OPENCLAW_STATE_DIR
         value: /data/.openclaw
       - key: OPENCLAW_WORKSPACE_DIR
