@@ -46,6 +46,22 @@ const server = http.createServer(async (req, res) => {
         childStatus = null;
       }
 
+      let startupLogTail = [];
+      try {
+        const rawLog = fs.readFileSync(process.env.RENDER_STARTUP_LOG_PATH || "/tmp/openclaw-render-startup.log", "utf8");
+        const secrets = [
+          process.env.TELEGRAM_BOT_TOKEN,
+          process.env.OPENAI_API_KEY,
+          process.env.OPENCLAW_GATEWAY_TOKEN,
+          process.env.TELEGRAM_WEBHOOK_SECRET,
+        ].filter(Boolean);
+        let safeLog = rawLog;
+        for (const secret of secrets) safeLog = safeLog.split(secret).join("***");
+        startupLogTail = safeLog.split(/\r?\n/).filter(Boolean).slice(-120);
+      } catch {
+        startupLogTail = [];
+      }
+
       res.end(JSON.stringify({
         ok: true,
         service: "openclaw-render-webhook-proxy",
@@ -54,6 +70,7 @@ const server = http.createServer(async (req, res) => {
         localWebhookReachable,
         localWebhookStatus,
         childStatus,
+        startupLogTail,
         env: {
           telegramBotToken: process.env.TELEGRAM_BOT_TOKEN ? "set" : "missing",
           openaiApiKey: process.env.OPENAI_API_KEY ? "set" : "missing",
