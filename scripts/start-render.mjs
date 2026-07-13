@@ -51,7 +51,7 @@ function startChild(name, command, args) {
 }
 
 startChild("Render webhook proxy", process.execPath, [proxyScript]);
-startChild("OpenClaw Gateway", process.execPath, [openclawCli, "gateway", "--bind", "lan", "--port", gatewayPort]);
+startChild("OpenClaw Gateway", process.execPath, [openclawCli, "gateway", "run", "--bind", "lan", "--port", gatewayPort]);
 
 function shutdown(signal) {
   if (shuttingDown) return;
