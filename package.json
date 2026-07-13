@@ -8,7 +8,7 @@
     "check": "node --check scripts/ensure-openclaw-config.mjs && node --check scripts/render-webhook-proxy.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.19.0"
   },
   "dependencies": {
     "openclaw": "2026.6.11"
