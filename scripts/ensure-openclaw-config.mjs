@@ -52,8 +52,10 @@ const config = {
     telegram: {
       enabled: true,
       botToken: "${TELEGRAM_BOT_TOKEN}",
-      dmPolicy: "pairing",
+      dmPolicy: "allowlist",
+      allowFrom: ["506501649"],
       groupPolicy: "allowlist",
+      groupAllowFrom: ["506501649"],
       webhookUrl,
       webhookSecret,
       webhookPath: normalizedPath,

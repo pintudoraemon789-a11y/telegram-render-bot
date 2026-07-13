@@ -33,6 +33,8 @@ Isi di Render → service → Environment:
 - `TELEGRAM_WEBHOOK_SECRET` = secret random panjang untuk verifikasi webhook Telegram
 - `RENDER_EXTERNAL_URL` = URL Render, contoh `https://telegram-render-bot-ir2l.onrender.com`
 
+DM Telegram dikunci ke user ID Mas: `506501649`, jadi tidak perlu pairing lewat Render Shell.
+
 Environment lain:
 
 - `TELEGRAM_WEBHOOK_PATH=/telegram-webhook`
