@@ -8,6 +8,26 @@ const root = process.cwd();
 const openclawCli = path.join(root, "node_modules", "openclaw", "openclaw.mjs");
 const proxyScript = path.join(root, "scripts", "render-webhook-proxy.mjs");
 const gatewayPort = process.env.OPENCLAW_GATEWAY_PORT || "18789";
+const childStatusPath = process.env.RENDER_CHILD_STATUS_PATH || "/tmp/openclaw-render-child-status.json";
+
+function writeChildStatus(extra = {}) {
+  const childrenStatus = [...children].map((child) => ({
+    pid: child.pid,
+    exitCode: child.exitCode,
+    signalCode: child.signalCode,
+    killed: child.killed,
+  }));
+  try {
+    fs.writeFileSync(childStatusPath, `${JSON.stringify({
+      updatedAt: new Date().toISOString(),
+      shuttingDown,
+      children: childrenStatus,
+      ...extra,
+    }, null, 2)}\n`);
+  } catch (error) {
+    console.warn(`Could not write child status ${childStatusPath}: ${error.message}`);
+  }
+}
 
 if (!fs.existsSync(openclawCli)) {
   console.error(`OpenClaw CLI not found at ${openclawCli}`);
@@ -17,6 +37,7 @@ if (!fs.existsSync(openclawCli)) {
 
 const children = new Set();
 let shuttingDown = false;
+writeChildStatus({ event: "init" });
 
 function startChild(name, command, args) {
   console.log(`Starting ${name}: ${command} ${args.join(" ")}`);
@@ -26,10 +47,12 @@ function startChild(name, command, args) {
   });
 
   children.add(child);
+  writeChildStatus({ event: "started", name, command, args, pid: child.pid });
 
   child.on("exit", (code, signal) => {
     children.delete(child);
     console.log(`${name} exited with code=${code ?? "null"} signal=${signal ?? "null"}`);
+    writeChildStatus({ event: "exited", name, code, signal });
 
     if (!shuttingDown) {
       shuttingDown = true;
@@ -40,6 +63,7 @@ function startChild(name, command, args) {
 
   child.on("error", (error) => {
     console.error(`${name} failed to start:`, error);
+    writeChildStatus({ event: "error", name, error: error.message });
     if (!shuttingDown) {
       shuttingDown = true;
       for (const other of children) other.kill("SIGTERM");
