@@ -13,10 +13,14 @@ services:
         sync: false
       - key: OPENAI_API_KEY
         sync: false
+      - key: GEMINI_API_KEY
+        sync: false
       - key: OPENCLAW_GATEWAY_TOKEN
         sync: false
       - key: OPENCLAW_MODEL
-        value: openai/gpt-4.1-mini
+        value: openai/gpt-5.6-sol
+      - key: OPENCLAW_FALLBACK_MODEL
+        value: google/gemini-3.1-pro-preview
       - key: TELEGRAM_WEBHOOK_SECRET
         sync: false
       - key: RENDER_EXTERNAL_URL

@@ -29,8 +29,12 @@ Isi di Render â†’ service â†’ Environment:
 
 - `TELEGRAM_BOT_TOKEN` = token bot Telegram dari BotFather
 - `OPENAI_API_KEY` = API key OpenAI
+- `GEMINI_API_KEY` = API key Gemini dari Google AI Studio
 - `OPENCLAW_GATEWAY_TOKEN` = secret random panjang
-- `OPENCLAW_MODEL` = model OpenClaw, default/rekomendasi `openai/gpt-4.1-mini`
+- `OPENCLAW_MODEL` = model utama, default `openai/gpt-5.6-sol`
+- `OPENCLAW_FALLBACK_MODEL` = model cadangan, default `google/gemini-3.1-pro-preview`
+
+Jika model utama gagal karena error provider, autentikasi, rate limit, atau timeout yang memenuhi syarat failover OpenClaw, permintaan akan diteruskan ke model cadangan.
 - `TELEGRAM_WEBHOOK_SECRET` = secret random panjang untuk verifikasi webhook Telegram
 - `RENDER_EXTERNAL_URL` = URL Render, contoh `https://telegram-render-bot-ir2l.onrender.com`
 
