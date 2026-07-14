@@ -90,6 +90,9 @@ const config = {
       },
     },
   },
+   commands: {
+    ownerAllowFrom: ["telegram:506501649"],
+  },
   messages: {
     visibleReplies: "automatic",
     groupChat: {
