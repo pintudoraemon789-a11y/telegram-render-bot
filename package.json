@@ -8,9 +8,10 @@
     "check": "node --check scripts/ensure-openclaw-config.mjs && node --check scripts/render-webhook-proxy.mjs && node --check scripts/start-render.mjs"
   },
   "engines": {
-    "node": ">=22.19.0"
+    "node": ">=24.15.0 <25"
   },
   "dependencies": {
+    "@openclaw/codex": "2026.7.1",
     "openclaw": "2026.7.1"
   }
 }
