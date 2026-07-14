@@ -14,7 +14,8 @@ if (!/^[A-Za-z0-9_-]{1,256}$/.test(webhookSecret)) {
 process.env.TELEGRAM_WEBHOOK_SECRET = webhookSecret;
 
 const webhookLocalPort = Number(process.env.TELEGRAM_WEBHOOK_LOCAL_PORT || 8787);
-const openclawModel = process.env.OPENCLAW_MODEL || "openai/gpt-4.1-mini";
+const openclawModel = process.env.OPENCLAW_MODEL || "openai/gpt-5.6-sol";
+const openclawFallbackModel = process.env.OPENCLAW_FALLBACK_MODEL || "google/gemini-3.1-pro-preview";
 
 process.env.OPENCLAW_STATE_DIR = stateDir;
 process.env.OPENCLAW_WORKSPACE_DIR = workspaceDir;
@@ -30,10 +31,12 @@ if (!renderExternalUrl) {
 
 console.log(`Env check: TELEGRAM_BOT_TOKEN=${process.env.TELEGRAM_BOT_TOKEN ? "set" : "missing"}`);
 console.log(`Env check: OPENAI_API_KEY=${process.env.OPENAI_API_KEY ? "set" : "missing"}`);
+console.log(`Env check: GEMINI_API_KEY=${process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY ? "set" : "missing"}`);
 console.log(`Env check: OPENCLAW_GATEWAY_TOKEN=${process.env.OPENCLAW_GATEWAY_TOKEN ? "set" : "missing"}`);
 console.log(`Env check: TELEGRAM_WEBHOOK_SECRET=${webhookSecret ? "set" : "missing"}`);
 console.log(`Env check: RENDER_EXTERNAL_URL=${renderExternalUrl || "missing"}`);
 console.log(`Env check: OPENCLAW_MODEL=${openclawModel}`);
+console.log(`Env check: OPENCLAW_FALLBACK_MODEL=${openclawFallbackModel}`);
 
 const normalizedPath = webhookPath.startsWith("/") ? webhookPath : `/${webhookPath}`;
 const webhookUrl = renderExternalUrl ? `${renderExternalUrl.replace(/\/$/, "")}${normalizedPath}` : "";
@@ -52,6 +55,7 @@ const config = {
       workspace: workspaceDir,
       model: {
         primary: openclawModel,
+        fallbacks: [openclawFallbackModel],
       },
     },
     list: [
